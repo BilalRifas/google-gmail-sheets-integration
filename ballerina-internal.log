@@ -1,7 +1,0 @@
-[2018-07-06 17:18:32,786] ERROR {org.ballerinalang.launcher.Main} - Do you mean to run the ballerina package as a project? If so run ballerina init to make it a project with a .ballerina directory 
-org.ballerinalang.util.exceptions.BallerinaException: Do you mean to run the ballerina package as a project? If so run ballerina init to make it a project with a .ballerina directory
-	at org.ballerinalang.launcher.LauncherUtils.runProgram(LauncherUtils.java:90)
-	at org.ballerinalang.launcher.Main$RunCmd.execute(Main.java:256)
-	at java.util.Optional.ifPresent(Optional.java:159)
-	at org.ballerinalang.launcher.Main.main(Main.java:66)
- 
