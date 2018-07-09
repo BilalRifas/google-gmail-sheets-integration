@@ -59,7 +59,8 @@ function main(string... args) {
     io:println(spreadsheet);
 }
 
-
+![alt text](
+https://github.com/BilalRifas/google-gmail-sheets-integration/blob/master/Screenshot%20from%202018-07-09%2011-06-51.png)
 
 # Connects to Gmail from Ballerina.
 
