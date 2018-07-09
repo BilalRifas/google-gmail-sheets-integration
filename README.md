@@ -58,3 +58,67 @@ function main(string... args) {
 
     io:println(spreadsheet);
 }
+
+
+
+# Connects to Gmail from Ballerina.
+
+
+You can now enter the credentials in the HTTP client config.
+
+endpoint gmail:Client gmailEP {
+    clientConfig:{
+        auth:{
+            accessToken:accessToken,
+            clientId:clientId,
+            clientSecret:clientSecret,
+            refreshToken:refreshToken
+        }
+    }
+};
+
+The sendMessage function sends an email. MessageRequest is a structure that contains all the data that is required to send an email. The userId represents the authenticated user and can be a Gmail address or ‘me’ (the currently authenticated user).
+
+string userId = "me";
+gmail:MessageRequest messageRequest;
+messageRequest.recipient = "recipient@mail.com";
+messageRequest.sender = "sender@mail.com";
+messageRequest.cc = "cc@mail.com";
+messageRequest.subject = "Email-Subject";
+messageRequest.messageBody = "Email Message Body Text";
+//Set the content type of the mail as TEXT_PLAIN or TEXT_HTML.
+messageRequest.contentType = gmail:TEXT_PLAIN;
+//Send the message.
+var sendMessageResponse = gmailEP->sendMessage(userId, messageRequest);
+
+The response from sendMessage is either a string tuple with the message ID and thread ID (if the message was sent successfully) or a GmailError (if the message was unsuccessful). The match operation can be used to handle the response if an error occurs.
+
+string messageId;
+string threadId;
+match sendMessageResponse {
+    (string, string) sendStatus => {
+        //If successful, returns the message ID and thread ID.
+        (messageId, threadId) = sendStatus;
+        io:println("Sent Message ID: " + messageId);
+        io:println("Sent Thread ID: " + threadId);
+    }
+    
+    //Unsuccessful attempts return a Gmail error.
+    gmail:GmailError e => io:println(e); 
+}
+
+The readMessage function reads messages. It returns the Message struct when successful and GmailError when unsuccessful.
+
+var response = gmailEP->readMessage(userId, untaint messageId);
+match response {
+    gmail:Message m => io:println("Sent Message: " + m);
+    gmail:GmailError e => io:println(e);
+} 
+
+The deleteMessage function deletes messages. It returns a GmailError when unsuccessful.
+
+var delete = gmailEP->deleteMessage(userId, untaint messageId);
+match delete {
+    boolean success => io:println("Message deletion success!");
+    gmail:GmailError e => io:println(e);
+}
